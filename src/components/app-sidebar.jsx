@@ -1,5 +1,5 @@
+// components/app-sidebar.jsx
 import { TvMinimalPlay,CpuIcon,FlameIcon, BikeIcon, HospitalIcon,SparkleIcon,LaughIcon, SwordIcon, Star ,DramaIcon,BriefcaseBusiness } from "lucide-react"
-
 import {
   Sidebar,
   SidebarContent,
@@ -16,60 +16,68 @@ import {
 const newsItems = [
   {
     title: "Technology",
-    url: "#",
     icon: CpuIcon,
+    category: "technology"
   },
   {
-    title: "Sports",
-    url: "#",
+    title: "Sports", 
     icon: BikeIcon,
+    category: "sports"
   },
   {
     title: "Entertainment",
-    url: "#",
     icon: TvMinimalPlay,
+    category: "entertainment"
   },
   {
     title: "Health",
-    url: "#",
     icon: HospitalIcon,
+    category: "health"
   },
   {
-    title: "Bussiness",
-    url: "#",
+    title: "Business", // Fixed typo
     icon: BriefcaseBusiness,
+    category: "business"
   },
 ]
 
 const movieItems = [
   {
     title: "Trending",
-    url: "#",
     icon: FlameIcon,
+    category: "trending"
   },
   {
     title: "Top Rated",
-    url: "#",
     icon: SparkleIcon,
+    category: "top_rated"
   },
   {
     title: "Action",
-    url: "#",
     icon: SwordIcon,
+    category: "action"
   },
   {
     title: "Comedy",
-    url: "#",
     icon: LaughIcon,
+    category: "comedy"
   },
   {
     title: "Drama",
-    url: "#",
     icon: DramaIcon,
+    category: "drama"
   },
 ]
 
-export function AppSidebar() {
+export function AppSidebar({ onCategoryClick, activeFilter }) {
+  const handleItemClick = (type, category, title) => {
+    onCategoryClick({ type, category, title })
+  }
+
+  const handleClearFilter = () => {
+    onCategoryClick(null) // Clear filter to show default content
+  }
+
   return (
     <Sidebar>
       <SidebarHeader className="text-center font-bold">
@@ -78,16 +86,28 @@ export function AppSidebar() {
       
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>News</SidebarGroupLabel>
+          <div className="flex items-center justify-between">
+            <SidebarGroupLabel>News</SidebarGroupLabel>
+            {activeFilter && (
+              <button 
+                onClick={handleClearFilter}
+                className="text-xs text-muted-foreground hover:text-foreground"
+              >
+                Show All
+              </button>
+            )}
+          </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {newsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                  <SidebarMenuButton 
+                    isActive={activeFilter?.type === 'news' && activeFilter?.category === item.category}
+                    onClick={() => handleItemClick('news', item.category, item.title)}
+                    className="cursor-pointer"
+                  >
+                    <item.icon />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -99,11 +119,13 @@ export function AppSidebar() {
             <SidebarMenu>
               {movieItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                  <SidebarMenuButton 
+                    isActive={activeFilter?.type === 'movies' && activeFilter?.category === item.category}
+                    onClick={() => handleItemClick('movies', item.category, item.title)}
+                    className="cursor-pointer"
+                  >
+                    <item.icon />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -111,13 +133,14 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <a href="#" className="flex justify-start items-center gap-2 ml-1">
+            <SidebarMenuButton>
               <Star/>
               <span className="text-lg font-semibold">Favourites</span>
-            </a>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
