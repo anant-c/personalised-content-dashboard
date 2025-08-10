@@ -1,5 +1,6 @@
 # Personalized Content Dashboard - Project Documentation
 
+## Demo: https://youtu.be/G8X-YH0QG4E
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
@@ -57,7 +58,7 @@ The **Personalized Content Dashboard** is a modern React application that aggreg
 The application follows a **component-based architecture** with clear separation of concerns:
 
 ```
-App (Redux Provider + Routing)
+App (Search Provider + Routing)
 ├── ThemeProvider (Theme management)
 ├── SidebarProvider (Sidebar context)
 └── Dashboard (Main layout)
