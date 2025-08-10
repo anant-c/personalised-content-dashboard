@@ -1,4 +1,3 @@
-// components/app-sidebar.jsx
 import { TvMinimalPlay,CpuIcon,FlameIcon, BikeIcon, HospitalIcon,SparkleIcon,LaughIcon, SwordIcon, Star ,DramaIcon,BriefcaseBusiness } from "lucide-react"
 import {
   Sidebar,
@@ -14,59 +13,19 @@ import {
 } from "./ui/sidebar"
 
 const newsItems = [
-  {
-    title: "Technology",
-    icon: CpuIcon,
-    category: "technology"
-  },
-  {
-    title: "Sports", 
-    icon: BikeIcon,
-    category: "sports"
-  },
-  {
-    title: "Entertainment",
-    icon: TvMinimalPlay,
-    category: "entertainment"
-  },
-  {
-    title: "Health",
-    icon: HospitalIcon,
-    category: "health"
-  },
-  {
-    title: "Business", // Fixed typo
-    icon: BriefcaseBusiness,
-    category: "business"
-  },
+  { title: "Technology", icon: CpuIcon, category: "technology" },
+  { title: "Sports", icon: BikeIcon, category: "sports" },
+  { title: "Entertainment", icon: TvMinimalPlay, category: "entertainment" },
+  { title: "Health", icon: HospitalIcon, category: "health" },
+  { title: "Business", icon: BriefcaseBusiness, category: "business" },
 ]
 
 const movieItems = [
-  {
-    title: "Trending",
-    icon: FlameIcon,
-    category: "trending"
-  },
-  {
-    title: "Top Rated",
-    icon: SparkleIcon,
-    category: "top_rated"
-  },
-  {
-    title: "Action",
-    icon: SwordIcon,
-    category: "action"
-  },
-  {
-    title: "Comedy",
-    icon: LaughIcon,
-    category: "comedy"
-  },
-  {
-    title: "Drama",
-    icon: DramaIcon,
-    category: "drama"
-  },
+  { title: "Trending", icon: FlameIcon, category: "trending" },
+  { title: "Top Rated", icon: SparkleIcon, category: "top_rated" },
+  { title: "Action", icon: SwordIcon, category: "action" },
+  { title: "Comedy", icon: LaughIcon, category: "comedy" },
+  { title: "Drama", icon: DramaIcon, category: "drama" },
 ]
 
 export function AppSidebar({ onCategoryClick, activeFilter }) {
@@ -75,7 +34,7 @@ export function AppSidebar({ onCategoryClick, activeFilter }) {
   }
 
   const handleClearFilter = () => {
-    onCategoryClick(null) // Clear filter to show default content
+    onCategoryClick(null)
   }
 
   return (
@@ -137,7 +96,11 @@ export function AppSidebar({ onCategoryClick, activeFilter }) {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton
+              isActive={activeFilter?.type === 'favorites'}
+              onClick={() => handleItemClick('favorites', 'all', 'Your Favourites')}
+              className="cursor-pointer"
+            >
               <Star/>
               <span className="text-lg font-semibold">Favourites</span>
             </SidebarMenuButton>

@@ -1,5 +1,4 @@
-// pages/Dashboard.jsx
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ModeToggle } from "../components/mode-toggle.jsx"
 import { AppSidebar } from "../components/app-sidebar.jsx"
 import { SidebarInset, SidebarTrigger } from "../components/ui/sidebar"
@@ -8,10 +7,41 @@ import Content from "../components/Content.jsx"
 
 const Dashboard = ({ openSearch }) => {
   const [activeFilter, setActiveFilter] = useState(null)
+  // State for favorites, loaded from localStorage on initial render
+  const [favorites, setFavorites] = useState(() => {
+    try {
+      const savedFavorites = localStorage.getItem('contentFavorites');
+      return savedFavorites ? JSON.parse(savedFavorites) : [];
+    } catch (error) {
+      console.error("Could not parse favorites from localStorage", error);
+      return [];
+    }
+  });
+
+  // Save favorites to localStorage whenever the state changes
+  useEffect(() => {
+    localStorage.setItem('contentFavorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   const handleCategoryClick = (filter) => {
     setActiveFilter(filter)
   }
+
+  // Function to add or remove an item from favorites
+  const toggleFavorite = (item, type) => {
+    // Use URL for news as a unique ID, and ID for movies
+    const itemId = type === 'news' ? item.url : item.id;
+    const existingIndex = favorites.findIndex(fav => fav.id === itemId);
+
+    if (existingIndex > -1) {
+      // Item exists, so we remove it
+      setFavorites(currentFavorites => currentFavorites.filter(fav => fav.id !== itemId));
+    } else {
+      // Item doesn't exist, so we add it
+      const newFavorite = { id: itemId, type, data: item };
+      setFavorites(currentFavorites => [...currentFavorites, newFavorite]);
+    }
+  };
 
   return (
     <div className='min-h-screen flex w-full'>
@@ -36,11 +66,18 @@ const Dashboard = ({ openSearch }) => {
             </h1>
             {activeFilter && (
               <div className="text-sm text-muted-foreground">
-                Showing {activeFilter.type} • {activeFilter.title}
+                {activeFilter.type === 'favorites' 
+                  ? 'Your Saved Items' 
+                  : `Showing ${activeFilter.type} • ${activeFilter.title}`
+                }
               </div>
             )}
           </div>
-          <Content activeFilter={activeFilter} />
+          <Content 
+            activeFilter={activeFilter} 
+            favorites={favorites}
+            toggleFavorite={toggleFavorite}
+          />
         </div>
       </SidebarInset>
     </div>
